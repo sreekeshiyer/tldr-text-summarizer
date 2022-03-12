@@ -1,0 +1,31 @@
+{
+  "name": "nextjs-tailwind-template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "static-build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "style:prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
+    "make-pretty": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.4.3",
+    "@heroicons/react": "^1.0.5",
+    "@tailwindcss/forms": "^0.4.0",
+    "autoprefixer": "^10.4.2",
+    "dotenv": "^14.3.2",
+    "next": "^12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "8.7.0",
+    "eslint-config-next": "12.0.9",
+    "postcss": "^8.4.5",
+    "prettier": "^2.5.1",
+    "prettier-plugin-tailwindcss": "^0.1.4",
+    "tailwindcss": "^3.0.17"
+  }
+}

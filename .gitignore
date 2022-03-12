@@ -1,0 +1,39 @@
+*.pyc
+*.env
+*/debug.log
+/backend/.flaskenv
+/backend/.venv
+
+# dependencies
+frontend/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+frontend/.next/
+/out/
+
+# production
+frontend/build
+
+# misc
+frontend/.DS_Store
+frontend/*.pem
+
+# debug
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# local env files
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# vercel
+frontend/.vercel
+.vscode
