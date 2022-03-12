@@ -1,5 +1,3 @@
-This is a custom [Next.js](https://nextjs.org/) template configured with Tailwind, HeroIcons and HeadlessUI.
-
 ### Local Setup
 
 Clone this repository:
