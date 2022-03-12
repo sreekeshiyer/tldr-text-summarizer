@@ -7,9 +7,6 @@ git clone https://github.com/sreekeshiyer/nextjs-tailwind-template.git
 ```
 
 ### Install all node modules.
-
-(If you do not want to use heroicons and headlessUI, you can remove `@headlessui/react` and `@heroicons/react` from the `package.json` file)
-
 ```bash
 npm install
 ```
