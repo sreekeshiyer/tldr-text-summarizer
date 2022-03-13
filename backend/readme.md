@@ -52,6 +52,6 @@
 
 ### Important Points to be noted
 
--   If you add a external library, please don't forget to freeze the dependencies in requirements.txt
+-   If you add an external library, please don't forget to freeze the dependencies in requirements.txt
 -   Use python black formatter to format your python code
--   Please don't merge any PR or branch in develop or stable which violates github pipeline, the pipeline should always be fixed
+-   Please don't merge any PR or branch in prod which violates github pipeline, the pipeline should always be fixed
