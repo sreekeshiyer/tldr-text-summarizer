@@ -48,7 +48,6 @@
 
 ### Test Setup (Optional)
 
--   To write tests you can refer the test setup of common route and follow it
 -   To run tests locally you need to hit `python -m pytest -v` on cmd
 
 ### Important Points to be noted
