@@ -1,27 +1,18 @@
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      screens: {
-        "2xl": { max: "1535px" },
-        // => @media (max-width: 1535px) { ... }
-
-        xl: { max: "1279px" },
-        // => @media (max-width: 1279px) { ... }
-
-        lg: { max: "1023px" },
-        // => @media (max-width: 1023px) { ... }
-
-        md: { max: "767px" },
-        // => @media (max-width: 767px) { ... }
-
-        sm: { max: "639px" },
-        // => @media (max-width: 639px) { ... }
-      },
+    content: [
+        "./pages/**/*.{js,ts,jsx,tsx}",
+        "./components/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+        extend: {
+            animation: {
+                bounce200: "bounce 1s infinite 200ms",
+                bounce400: "bounce 1s infinite 400ms",
+            },
+        },
+        fontFamily: {
+            sans: ["Open Sans", "sans-serif"],
+        },
     },
-  },
-  plugins: [require("@tailwindcss/forms")],
+    plugins: [require("@tailwindcss/forms")],
 };
