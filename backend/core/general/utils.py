@@ -2,6 +2,11 @@ import os
 import textract
 from werkzeug.utils import secure_filename
 
+# TODO 6: Uncomment this import after your model is ready
+# from core.general.models import summarize
+
+# TODO 1: Make a Utility function from your model, import it here, such that, you pass plain text as argument and get the summarized text in return. Preferably create a new file models.py in the same directory to do that.
+
 # Constants
 
 SAVE_DIR = "./static/temp/"
@@ -27,9 +32,6 @@ def extract_text_from_file(file):
         text = textract.process(currFile)
 
         return {"text": text, "filename": filename}
-
-
-# TODO 1: Make a Utility function from your model, import it here, such that, you pass plain text as argument and get the summarized text in return. Preferably create a new file models.py in the same directory to do that.
 
 
 def summarize_from_url(url: str) -> tuple(str):

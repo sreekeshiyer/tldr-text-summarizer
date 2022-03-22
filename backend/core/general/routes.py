@@ -62,7 +62,7 @@ def summary_from_url():
 
 @general.route(f"{BASE_URL}/summarize_from_file")
 @main_guard
-def summary_from_url():
+def summary_from_file():
     # TODO : Call summarize_from_file function (utils.py) here
     # Replace static strings with the tuple values you get in return
     # Validation is required here, I'll add it later
