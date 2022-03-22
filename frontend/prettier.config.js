@@ -1,3 +1,4 @@
 module.exports = {
-    tailwindConfig: "./tailwind.config.js",
+  tailwindConfig: "./tailwind.config.js",
+  tabWidth: 4,
 };

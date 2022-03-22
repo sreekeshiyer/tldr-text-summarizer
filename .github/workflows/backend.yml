@@ -1,5 +1,4 @@
-name: Pipeline-Backend
-
+name: flask_actions
 on: [push, pull_request]
 
 jobs:
