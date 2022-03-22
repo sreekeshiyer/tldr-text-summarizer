@@ -1,5 +1,5 @@
-import textract
 import os
+import textract
 from werkzeug.utils import secure_filename
 
 # Constants
@@ -48,4 +48,4 @@ def summarize_from_file(file: str) -> tuple(str):
 
     # TODO 5: Call the Main Function, pass in the text as argument
     # Eg. return summarize(text)
-    return ("extracted_text_from_file", "summarized_text")
+    return (file, "extracted_text_from_file", "summarized_text")
