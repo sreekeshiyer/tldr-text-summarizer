@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^1.31.1",
     "@tailwindcss/forms": "^0.4.0",
     "autoprefixer": "^10.4.2",
+    "axios": "^0.26.1",
     "dotenv": "^14.3.2",
     "next": "^12.1.0",
     "react": "17.0.2",

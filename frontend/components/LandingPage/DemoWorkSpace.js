@@ -3,15 +3,17 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Summary from "@/components/Summary";
 import Loader from "@/components/Loader";
+import { summarizePlainText } from "@/store/index";
 
 export default function DemoWorkSpace() {
     const [text, setText] = useState("");
     const [showResult, setShowResult] = useState(false);
+    const [resultText, setResultText] = useState("");
     const [loading, setLoading] = useState(false);
 
     const resultRef = useRef(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -32,8 +34,18 @@ export default function DemoWorkSpace() {
             return;
         }
 
+        try {
+            let { result_text } = await summarizePlainText(text);
+            setResultText(result_text);
+        } catch (e) {
+            toast.error(e);
+            setLoading(false);
+            return;
+        }
+
         setLoading(false);
         setShowResult(true);
+
         resultRef?.current.scrollIntoView({
             block: "start",
             behavior: "smooth",
@@ -68,7 +80,7 @@ export default function DemoWorkSpace() {
             </button>
 
             <div className="my-4">
-                {showResult && <Summary />}
+                {showResult && <Summary text={resultText} />}
                 <div ref={resultRef} style={{ height: 0 }} />
             </div>
             <h4 className="text-[0.7rem] text-gray-500 md:text-[0.9rem]">

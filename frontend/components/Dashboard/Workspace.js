@@ -4,14 +4,20 @@ import "react-toastify/dist/ReactToastify.css";
 import Summary from "@/components/Summary";
 import Loader from "@/components/Loader";
 import AuthContext from "@/context/AuthContext";
-import { addScan } from "@/store/index";
+import {
+    addScan,
+    summarizeFromFile,
+    summarizeFromURL,
+    summarizePlainText,
+} from "@/store/index";
 
 export default function WorkSpace() {
-    const [text, setText] = useState("");
+    const [text, setText] = useState(null);
     const [file, setFile] = useState(null);
     const [url, setURL] = useState("");
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [resultText, setResultText] = useState("");
     const resultRef = useRef(null);
 
     const { user } = useContext(AuthContext);
@@ -19,7 +25,7 @@ export default function WorkSpace() {
     const handleClear = (e) => {
         e.preventDefault();
 
-        setText("");
+        setText(null);
         setFile(null);
         setURL("");
     };
@@ -35,8 +41,19 @@ export default function WorkSpace() {
         }
 
         // Get Input and Result text from API
-        const input_text = "te_url_inp";
-        const resText = "abccc";
+        const input_text = "";
+
+        try {
+            const { extracted_text, result_text } = await summarizeFromURL({
+                url,
+            });
+            setResultText(result_text);
+            input_text = extracted_text;
+        } catch (e) {
+            toast.error(e);
+            setLoading(false);
+            return;
+        }
 
         try {
             let e = await addScan({
@@ -49,10 +66,12 @@ export default function WorkSpace() {
 
             if (e) {
                 toast.error(e.message);
+                setLoading(false);
                 return;
             }
         } catch (e) {
             toast.error(e);
+            setLoading(false);
             return;
         }
 
@@ -87,19 +106,43 @@ export default function WorkSpace() {
             return;
         }
 
-        // Call API, get Result
+        var extract_text = "";
 
-        const resText = "abc";
+        if (file) {
+            // Use File as Input
+            try {
+                const { extracted_text, result_text } = await summarizeFromFile(
+                    file
+                );
+                setResultText(result_text);
+                extract_text = extracted_text;
+            } catch (e) {
+                toast.error(e);
+                setLoading(false);
+                return;
+            }
+        } else {
+            // Use text
 
-        // Insert into Results Table
+            try {
+                const { result_text } = await summarizePlainText({
+                    input_text: text,
+                });
+                setResultText(result_text);
+            } catch (e) {
+                toast.error(e);
+                setLoading(false);
+                return;
+            }
+        }
 
         try {
             let e = await addScan({
                 user_id: user.id,
-                file: file,
-                input_text: text,
-                url: url,
-                result_text: resText,
+                file: file || null,
+                input_text: extract_text || text || null,
+                url: null,
+                result_text: resultText,
             });
 
             if (e) {
@@ -109,7 +152,6 @@ export default function WorkSpace() {
             }
         } catch (e) {
             toast.error(e);
-            setLoading(false);
             return;
         }
 
@@ -200,7 +242,7 @@ export default function WorkSpace() {
             </button>
 
             <div className="my-4 px-4">
-                {showResult && <Summary />}
+                {showResult && <Summary text={resultText} />}
                 <div ref={resultRef} style={{ height: 0 }} />
             </div>
         </div>

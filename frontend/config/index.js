@@ -12,3 +12,16 @@ export const supabaseServer = createClient(
         fetch: fetch,
     }
 );
+
+export const FLASK_API_URL =
+    process.env.FLASK_API_URL || "http://localhost:5000/api/v1";
+
+export const demoHeaders = {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_FLASK_DEMO_KEY}`,
+    "Content-Type": "application/json",
+};
+
+export const headers = {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_FLASK_API_KEY}`,
+    "Content-Type": "application/json",
+};

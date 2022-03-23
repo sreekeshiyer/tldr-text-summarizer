@@ -1,13 +1,24 @@
 import os
+from flask import Response
 import textract
 from werkzeug.utils import secure_filename
 
-# TODO 6: Uncomment this import after your model is ready
+# TODO 7: Uncomment this import after your model is ready
 # from core.general.models import summarize
 
 # TODO 1: Make a Utility function from your model, import it here, such that, you pass plain text as argument and get the summarized text in return. Preferably create a new file models.py in the same directory to do that.
 
 # Constants
+
+MethodNotAllowedError = Response(
+    """{"message": "Method Not Allowed"}""",
+    status=405,
+    mimetype="application/json",
+)
+
+FileNotFound_Error = Response(
+    """{"message": "Bad Request"}""", status=400, mimetype="application/json"
+)
 
 SAVE_DIR = "./static/temp/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "doc", "docx"}
@@ -22,16 +33,21 @@ def allowed_file(filename: str):
 def extract_text_from_file(file):
 
     if file and allowed_file(file.filename):
-
         filename = secure_filename(file.filename)
-
         file.save(os.path.join(SAVE_DIR, filename))
-
         currFile = os.path.join(SAVE_DIR) + filename
 
         text = textract.process(currFile)
-
         return {"text": text, "filename": filename}
+
+
+# TODO 6: Write a utility function to extract text from a given URL
+
+
+def extract_text_from_url(url):
+
+    # TODO: Write your logic here
+    return {"url": url, "text": "extracted_text_from_url"}
 
 
 def summarize_from_url(url: str) -> tuple(str):
@@ -42,12 +58,3 @@ def summarize_from_url(url: str) -> tuple(str):
     # TODO 3: Call the Main Function, pass in the text as argument
     # Eg. return summarize(text)
     return (url, "extracted_text" "summarized_text_from_url")
-
-
-def summarize_from_file(file: str) -> tuple(str):
-
-    # TODO 4: Call extract_text_from_file to get the extracted text.
-
-    # TODO 5: Call the Main Function, pass in the text as argument
-    # Eg. return summarize(text)
-    return (file, "extracted_text_from_file", "summarized_text")
