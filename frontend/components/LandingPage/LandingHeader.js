@@ -35,6 +35,7 @@ export default function LandingPageHeader() {
                                                     src="/logo.png"
                                                     width={50}
                                                     height={50}
+                                                    alt="logo"
                                                 />
                                             </a>
                                         </Link>
@@ -96,6 +97,7 @@ export default function LandingPageHeader() {
                                                 src="/logo.png"
                                                 width={50}
                                                 height={50}
+                                                alt="logo"
                                             />
                                         </div>
                                         <div className="-mr-2">
@@ -146,6 +148,7 @@ export default function LandingPageHeader() {
                                         src="/assets/bmac.png"
                                         height={24}
                                         width={24}
+                                        alt="BuyMeACoffee"
                                     />
                                 </span>
                             </a>

@@ -59,6 +59,7 @@ export default function ScansPage() {
                                                             {sc.file && (
                                                                 <span className="mr-4">
                                                                     <a
+                                                                        rel="noopener noreferrer"
                                                                         download={
                                                                             SUPABASE_STORAGE_URL +
                                                                             sc.file
@@ -77,6 +78,7 @@ export default function ScansPage() {
                                                                 <span>
                                                                     <a
                                                                         target="_blank"
+                                                                        rel="noopener noreferrer"
                                                                         href={
                                                                             sc.url
                                                                         }

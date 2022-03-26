@@ -97,6 +97,7 @@ export default function Auth() {
                         >
                             <Image
                                 src="/assets/google.png"
+                                alt="GoogleIcon"
                                 height={40}
                                 width={210}
                             />

@@ -13,8 +13,8 @@ export default function SettingsPage({ user: { user } }) {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        email !== user.email && setButtons(true);
-    }, [email]);
+        email !== user?.email && setButtons(true);
+    }, [email, user]);
 
     const [buttons, setButtons] = useState(false);
 

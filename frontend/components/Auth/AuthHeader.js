@@ -9,7 +9,12 @@ export default function AuthHeader() {
                     <a>
                         <span className="sr-only">Logo</span>
                         <div className="flex items-center justify-center gap-4">
-                            <Image src="/logo.png" width={50} height={50} />
+                            <Image
+                                src="/logo.png"
+                                width={50}
+                                height={50}
+                                alt="Logo"
+                            />
 
                             <h1 className="text-2xl font-bold">TLDR</h1>
                         </div>
@@ -31,6 +36,7 @@ export default function AuthHeader() {
                                 src="/assets/bmac.png"
                                 height={24}
                                 width={24}
+                                alt="BuyMeACoffee"
                             />
                         </span>
                     </a>
