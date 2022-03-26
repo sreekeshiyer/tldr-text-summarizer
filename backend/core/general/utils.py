@@ -1,12 +1,10 @@
 import os
-from flask import Response
+from typing import Any
 import textract
+from flask import Response
 from werkzeug.utils import secure_filename
-
-# TODO 7: Uncomment this import after your model is ready
-# from core.general.models import summarize
-
-# TODO 1: Make a Utility function from your model, import it here, such that, you pass plain text as argument and get the summarized text in return. Preferably create a new file models.py in the same directory to do that.
+from newspaper import Article
+from core.general.model import summarize
 
 # Constants
 
@@ -20,7 +18,7 @@ FileNotFound_Error = Response(
     """{"message": "Bad Request"}""", status=400, mimetype="application/json"
 )
 
-SAVE_DIR = "./static/temp/"
+SAVE_DIR = "./backend/static/temp/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "doc", "docx"}
 
 # Utility Functions
@@ -46,15 +44,30 @@ def extract_text_from_file(file):
 
 def extract_text_from_url(url):
 
-    # TODO: Write your logic here
-    return {"url": url, "text": "extracted_text_from_url"}
+    article = Article(url)
+    article.download()
+    article.parse()
+    return {"url": url, "text": article.text}
 
 
-def summarize_from_url(url: str) -> tuple(str):
+def summarize_text(text: str, range=0.3):
 
-    # TODO 2: Call another Utility Function (you'll have to create one) to extract text from a URL.
-    # Eg. text = 'extracted_text_from_url'
+    return (text, summarize(text, range))
 
-    # TODO 3: Call the Main Function, pass in the text as argument
-    # Eg. return summarize(text)
-    return (url, "extracted_text" "summarized_text_from_url")
+
+def summarize_from_url(url: str, range=0.3):
+
+    text = extract_text_from_url(url)["text"]
+
+    return (url, text, summarize(text, range))
+
+
+def summarize_from_file(file: Any, range=0.3):
+
+    file_res = extract_text_from_file(file)
+    text = file_res["text"]
+    text = text.decode(encoding="UTF-8")
+
+    os.remove(os.path.join(SAVE_DIR, file_res["filename"]))
+
+    return (file_res["filename"], text, summarize(text, range))

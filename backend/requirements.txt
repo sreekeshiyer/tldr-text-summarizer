@@ -4,3 +4,7 @@ Flask-Cors==3.0.10
 pylint==2.12.2
 python-dotenv==0.19.2
 textract
+newspaper3k
+spacy
+pytest
+gunicorn

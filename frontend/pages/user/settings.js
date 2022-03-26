@@ -5,10 +5,12 @@ import { getUserServerSide } from "@/store/index";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "@/context/AuthContext";
+import Loader from "@/components/Loader";
 
 export default function SettingsPage({ user: { user } }) {
     const [email, setEmail] = useState(user.email);
     const { changeEmail } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         email !== user.email && setButtons(true);
@@ -18,10 +20,12 @@ export default function SettingsPage({ user: { user } }) {
 
     const handleEmailChange = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             if (email !== user.email) {
-                const { error } = await changeEmail({ email });
+                const error = await changeEmail({ email });
+
                 if (error) {
                     toast.error(error.message);
                     return;
@@ -30,15 +34,22 @@ export default function SettingsPage({ user: { user } }) {
                 toast.success("Email Updated!");
             } else {
                 setButtons(false);
+                setLoading(false);
+                return;
             }
         } catch (e) {
             toast.error(e);
+            setLoading(false);
+            return;
         }
+
+        setLoading(false);
     };
 
     return (
         <Layout title="TLDR | User Settings">
             <div className="h-[100vh]">
+                {loading && <Loader />}
                 <ToastContainer />
                 <Header />
                 <div className="flex items-center justify-center">

@@ -1,11 +1,11 @@
-import os
-from flask import Blueprint, Response, request
+from flask import Blueprint, Response, jsonify, request
 from auth import demo_guard, main_guard
 from core.general.utils import (
-    SAVE_DIR,
     MethodNotAllowedError,
     FileNotFound_Error,
-    extract_text_from_file,
+    summarize_text,
+    summarize_from_url,
+    summarize_from_file,
 )
 from config import BASE_URL
 
@@ -35,18 +35,13 @@ def auth_check():
 @demo_guard
 def demo():
     if request.method == "POST":
-        # Uncomment these two lines when you're working on the function
-        # data = request.get_json()
-        # text = data['input_text']
 
-        # TODO : Call summarize_from_text function (utils.py) here
-        # Replace static strings with the tuple values you get in return
-        res = {"result_text": "result text"}
-        return Response(
-            res,
-            status=200,
-            mimetype="application/json",
-        )
+        data = request.get_json()
+        text = data["input_text"]
+
+        res = {"result_text": summarize_text(text)[1]}
+
+        return jsonify(res)
 
     else:
         return MethodNotAllowedError
@@ -57,18 +52,14 @@ def demo():
 def summary_from_text():
 
     if request.method == "POST":
-        # Uncomment these two lines when you're working on the function
-        # data = request.get_json()
-        # text = data['input_text']
 
-        # TODO : Call summarize_from_text function (utils.py) here
-        # Replace static strings with the tuple values you get in return
-        res = {"result_text": "result text"}
-        return Response(
-            res,
-            status=200,
-            mimetype="application/json",
-        )
+        data = request.get_json()
+        text = data["input_text"]
+        range = data["range"]
+
+        res = {"result_text": summarize_text(text, int(range) / 100)[1]}
+
+        return jsonify(res)
 
     else:
         return MethodNotAllowedError
@@ -80,18 +71,14 @@ def summary_from_url():
 
     if request.method == "POST":
 
-        # Uncomment these two lines when you're working on the function
-        # data = request.get_json()
-        # url = data['url']
+        data = request.get_json()
+        url = data["url"]
+        range = data["range"]
 
-        # TODO : Call summarize_from_url function (utils.py) here
-        # Replace static strings with the tuple values you get in return
-        res = {"extracted_text": "extracted_text_from_url", "result_text": "summary"}
-        return Response(
-            res,
-            status=200,
-            mimetype="application/json",
-        )
+        result = summarize_from_url(url, int(range) / 100)
+
+        res = {"extracted_text": result[1], "result_text": result[2]}
+        return jsonify(res)
     else:
         return MethodNotAllowedError
 
@@ -111,23 +98,14 @@ def summary_from_file():
             if file.filename == "":
                 return FileNotFound_Error
 
-            file_res = extract_text_from_file(file)
-            text = file_res["text"]
-
-            # TODO : Call summarize_from_file function (utils.py) here
-            # Replace static strings with the tuple values you get in return
-
-            os.remove(os.path.join(SAVE_DIR, file_res["filename"]))
+            result = summarize_from_file(file, int(request.form["range"]) / 100)
 
             res = {
-                "extracted_text": text,
-                "result_text": "summary",
+                "extracted_text": result[1],
+                "result_text": result[2],
+                "filename": result[0],
             }
-            return Response(
-                res,
-                status=200,
-                mimetype="application/json",
-            )
+            return jsonify(res)
         except Exception as e:
             return "Exception " + str(e) + " Occured"
 

@@ -5,6 +5,7 @@ import Summary from "@/components/Summary";
 import Loader from "@/components/Loader";
 import AuthContext from "@/context/AuthContext";
 import {
+    addFileToStorage,
     addScan,
     summarizeFromFile,
     summarizeFromURL,
@@ -12,22 +13,24 @@ import {
 } from "@/store/index";
 
 export default function WorkSpace() {
-    const [text, setText] = useState(null);
+    const [text, setText] = useState("");
     const [file, setFile] = useState(null);
     const [url, setURL] = useState("");
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const [resultText, setResultText] = useState("");
     const resultRef = useRef(null);
+    const [range, setRange] = useState(15);
 
     const { user } = useContext(AuthContext);
 
     const handleClear = (e) => {
         e.preventDefault();
 
-        setText(null);
+        setText("");
         setFile(null);
         setURL("");
+        setRange(15);
     };
 
     const handleURLSubmit = async (e) => {
@@ -46,22 +49,17 @@ export default function WorkSpace() {
         try {
             const { extracted_text, result_text } = await summarizeFromURL({
                 url,
+                range: range,
             });
+
             setResultText(result_text);
             input_text = extracted_text;
-        } catch (e) {
-            toast.error(e);
-            setLoading(false);
-            return;
-        }
-
-        try {
             let e = await addScan({
                 user_id: user.id,
                 file: null,
                 input_text: input_text,
                 url: url,
-                result_text: resText,
+                result_text: result_text,
             });
 
             if (e) {
@@ -69,13 +67,14 @@ export default function WorkSpace() {
                 setLoading(false);
                 return;
             }
+
+            setShowResult(true);
         } catch (e) {
             toast.error(e);
             setLoading(false);
             return;
         }
 
-        setShowResult(true);
         setLoading(false);
         toast.success("Text Summarized!");
         resultRef?.current.scrollIntoView({
@@ -95,40 +94,73 @@ export default function WorkSpace() {
             return;
         }
 
-        const len = text.split(" ").length;
-        if (len < 30) {
-            toast.info("Text needs to have at least 30 words.");
-            setLoading(false);
-            return;
-        } else if (len > 5000) {
-            toast.info("Word Limit is 5000.");
-            setLoading(false);
-            return;
-        }
-
-        var extract_text = "";
-
         if (file) {
             // Use File as Input
+
             try {
-                const { extracted_text, result_text } = await summarizeFromFile(
-                    file
-                );
+                const { extracted_text, result_text, filename } =
+                    await summarizeFromFile({ file, range: range });
                 setResultText(result_text);
-                extract_text = extracted_text;
+                setShowResult(true);
+
+                let e = await addScan({
+                    user_id: user.id,
+                    file: filename,
+                    input_text: extracted_text,
+                    url: null,
+                    result_text: result_text,
+                });
+
+                if (e) {
+                    toast.error(e.message);
+                    setLoading(false);
+                    return;
+                }
+
+                let e2 = await addFileToStorage({ filename, file });
+
+                if (e2) {
+                    toast.error(e2.message);
+                    setLoading(false);
+                    return;
+                }
             } catch (e) {
                 toast.error(e);
                 setLoading(false);
                 return;
             }
         } else {
-            // Use text
-
+            const len = text.split(" ").length;
+            if (len < 30) {
+                toast.info("Text needs to have at least 30 words.");
+                setLoading(false);
+                return;
+            } else if (len > 5000) {
+                toast.info("Word Limit is 5000.");
+                setLoading(false);
+                return;
+            }
             try {
                 const { result_text } = await summarizePlainText({
                     input_text: text,
+                    range: range,
                 });
                 setResultText(result_text);
+                setShowResult(true);
+
+                let e = await addScan({
+                    user_id: user.id,
+                    file: null,
+                    input_text: text,
+                    url: null,
+                    result_text: result_text,
+                });
+
+                if (e) {
+                    toast.error(e.message);
+                    setLoading(false);
+                    return;
+                }
             } catch (e) {
                 toast.error(e);
                 setLoading(false);
@@ -136,26 +168,6 @@ export default function WorkSpace() {
             }
         }
 
-        try {
-            let e = await addScan({
-                user_id: user.id,
-                file: file || null,
-                input_text: extract_text || text || null,
-                url: null,
-                result_text: resultText,
-            });
-
-            if (e) {
-                toast.error(e.message);
-                setLoading(false);
-                return;
-            }
-        } catch (e) {
-            toast.error(e);
-            return;
-        }
-
-        setShowResult(true);
         setLoading(false);
         toast.success("Text Summarized!");
         resultRef?.current.scrollIntoView({
@@ -164,13 +176,18 @@ export default function WorkSpace() {
         });
     };
 
+    const onFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
     return (
         <div className="my-10 flex flex-col items-center justify-center">
             {loading && <Loader />}
-            <ToastContainer />
+
             <h1 className="py-14 text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl">
                 Enter a URL
             </h1>
+            <ToastContainer />
             <input
                 type="text"
                 className="w-[90%] rounded-sm border-gray-100 bg-gray-900 text-gray-100 shadow-md sm:w-full"
@@ -224,13 +241,40 @@ export default function WorkSpace() {
                     <input
                         className="form-control m-0 block w-full rounded border border-solid border-gray-600 bg-gray-800 bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-200 transition ease-in-out focus:border-blue-600 focus:bg-gray-800 focus:text-gray-300 focus:outline-none"
                         type="file"
-                        id="formFile"
-                        value={file}
-                        onChange={(e) => setFile(e.target.files[0])}
+                        id="file"
+                        onChange={onFileChange}
                     />
                 </div>
             </div>
-
+            <div className="my-6 text-center">
+                <label
+                    htmlFor="customRange2"
+                    className="form-label w-full self-center text-2xl font-bold"
+                >
+                    Change Summary Size (Percentage of Original Text)
+                </label>
+                <div className="mt-4 flex w-full items-center justify-center gap-3 self-center">
+                    <h1>15 % </h1>
+                    <input
+                        type="range"
+                        className="
+      form-range
+      my-2
+      h-6
+      appearance-none
+      rounded-md
+      bg-gray-200 bg-opacity-60 p-2
+      focus:shadow-none focus:outline-none focus:ring-0
+    "
+                        min="15"
+                        max="50"
+                        id="customRange2"
+                        value={range}
+                        onChange={(e) => setRange(e.target.value)}
+                    />
+                    <h1>50 %</h1>
+                </div>
+            </div>
             <button
                 className="my-5 inline-block rounded bg-blue-600 px-6 py-2.5 font-medium leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
                 type="submit"

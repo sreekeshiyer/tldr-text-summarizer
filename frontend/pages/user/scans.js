@@ -5,6 +5,7 @@ import { ChevronUpIcon } from "@heroicons/react/solid";
 import Summary from "@/components/Summary";
 import { getUserScans } from "@/store/index";
 import { useEffect, useState } from "react";
+import { SUPABASE_STORAGE_URL } from "@/config/index";
 
 export default function ScansPage() {
     const [scans, setScans] = useState(null);
@@ -58,7 +59,13 @@ export default function ScansPage() {
                                                             {sc.file && (
                                                                 <span className="mr-4">
                                                                     <a
+                                                                        download={
+                                                                            SUPABASE_STORAGE_URL +
+                                                                            sc.file
+                                                                        }
+                                                                        target="_blank"
                                                                         href={
+                                                                            SUPABASE_STORAGE_URL +
                                                                             sc.file
                                                                         }
                                                                     >
@@ -69,6 +76,7 @@ export default function ScansPage() {
                                                             {sc.url && (
                                                                 <span>
                                                                     <a
+                                                                        target="_blank"
                                                                         href={
                                                                             sc.url
                                                                         }

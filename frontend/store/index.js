@@ -33,6 +33,13 @@ export const addScan = async ({
     if (error) return error;
 };
 
+export const addFileToStorage = async ({ filename, file }) => {
+    const { data, error } = await supabase.storage
+        .from("files")
+        .upload(`files/${filename}`, file);
+    if (error) return error;
+};
+
 /* API CALLS */
 
 // Demo
@@ -41,45 +48,43 @@ export const demoSummarizer = async ({ input_text }) => {
     const res = await axios({
         method: "POST",
         url: `${FLASK_API_URL}/demo`,
-        data: { text: input_text },
+        data: { input_text: input_text },
         headers: demoHeaders,
     });
-
-    return res.data;
+    return res.data["result_text"];
 };
 
 // From URL
 
-export const summarizeFromURL = async ({ url }) => {
+export const summarizeFromURL = async ({ url, range }) => {
     const res = await axios({
         method: "POST",
         url: `${FLASK_API_URL}/summarize_from_url`,
-        data: { url: url },
+        data: { url: url, range: range },
         headers: headers,
     });
-
     return res.data;
 };
 
 // Plain Text
 
-export const summarizePlainText = async ({ input_text }) => {
+export const summarizePlainText = async ({ input_text, range }) => {
     const res = await axios({
         method: "POST",
         url: `${FLASK_API_URL}/summarize_from_text`,
-        data: { text: input_text },
+        data: { input_text: input_text, range: range },
         headers: headers,
     });
-
     return res.data;
 };
 
 // File
 
-export const summarizeFromFile = async ({ file }) => {
+export const summarizeFromFile = async ({ file, range }) => {
     let formData = new FormData();
 
     formData.append("file", file);
+    formData.append("range", range);
 
     const res = await axios.post(
         `${FLASK_API_URL}/summarize_from_file`,
@@ -88,6 +93,5 @@ export const summarizeFromFile = async ({ file }) => {
             headers: headers,
         }
     );
-
     return res.data;
 };

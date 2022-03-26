@@ -13,8 +13,10 @@ export const supabaseServer = createClient(
     }
 );
 
+export const SUPABASE_STORAGE_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/files/files/`;
+
 export const FLASK_API_URL =
-    process.env.FLASK_API_URL || "http://localhost:5000/api/v1";
+    process.env.NEXT_PUBLIC_FLASK_API_URL || "http://localhost:5000/api/v1";
 
 export const demoHeaders = {
     Authorization: `Bearer ${process.env.NEXT_PUBLIC_FLASK_DEMO_KEY}`,
