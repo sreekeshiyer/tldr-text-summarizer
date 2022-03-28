@@ -27,6 +27,8 @@ import urllib.request
 #fetching the content from the URL
 fetched_data = urllib.request.urlopen('https://sreekeshiyer.hashnode.dev/getting-started-with-web-development')
 
+def summarize(text: str, per: int) -> str:
+    
 article_read = fetched_data.read()
 
 #parsing the URL content and storing in a variable
