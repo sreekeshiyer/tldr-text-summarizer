@@ -102,6 +102,7 @@ export default function WorkSpace() {
                     await summarizeFromFile({ file, range: range });
                 setResultText(result_text);
                 setShowResult(true);
+                let epo = Date.now();
 
                 let e = await addScan({
                     user_id: user.id,
@@ -117,7 +118,10 @@ export default function WorkSpace() {
                     return;
                 }
 
-                let e2 = await addFileToStorage({ filename, file });
+                let e2 = await addFileToStorage({
+                    filename: `${filename}_${epo}`,
+                    file: file,
+                });
 
                 if (e2) {
                     toast.error(e2.message);

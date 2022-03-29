@@ -50,10 +50,13 @@ export default function ScansPage() {
                                                                 ) + 1}
                                                             </span>
                                                             <span className="mr-4">
-                                                                {sc.input_text.substring(
-                                                                    0,
-                                                                    25
-                                                                )}
+                                                                {sc.input_text
+                                                                    .length > 5
+                                                                    ? sc.input_text.substring(
+                                                                          0,
+                                                                          25
+                                                                      )
+                                                                    : sc.input_text}
                                                                 ...
                                                             </span>
                                                             {sc.file && (
