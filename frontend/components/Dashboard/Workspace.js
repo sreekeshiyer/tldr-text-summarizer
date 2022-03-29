@@ -106,7 +106,7 @@ export default function WorkSpace() {
 
                 let e = await addScan({
                     user_id: user.id,
-                    file: filename,
+                    file: `${filename}_${epo}`,
                     input_text: extracted_text,
                     url: null,
                     result_text: result_text,

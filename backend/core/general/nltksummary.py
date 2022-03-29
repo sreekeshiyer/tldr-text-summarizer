@@ -7,54 +7,56 @@ Original file is located at
     https://colab.research.google.com/drive/1YfvxoGVqj4Pcxi5atJI5jRgM9wgHQCzZ
 """
 
-pip install nltk
-
 import nltk
-nltk.download('all')
+
+nltk.download("all")
 from nltk.corpus import stopwords
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('corpus')
+
+nltk.download("punkt")
+nltk.download("stopwords")
+nltk.download("corpus")
 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, sent_tokenize
 import bs4 as BeautifulSoup
 import urllib.request
 
-#importing libraries
+# importing libraries
 
 
-#fetching the content from the URL
-fetched_data = urllib.request.urlopen('https://sreekeshiyer.hashnode.dev/getting-started-with-web-development')
+# fetching the content from the URL
+fetched_data = urllib.request.urlopen(
+    "https://sreekeshiyer.hashnode.dev/getting-started-with-web-development"
+)
+
 
 def summarize(text: str, per: int) -> str:
 
     article_read = fetched_data.read()
 
-    #parsing the URL content and storing in a variable
-    article_parsed = BeautifulSoup.BeautifulSoup(article_read,'html.parser')
+    # parsing the URL content and storing in a variable
+    article_parsed = BeautifulSoup.BeautifulSoup(article_read, "html.parser")
 
-    #returning <p> tags
-    paragraphs = article_parsed.find_all('p')
+    # returning <p> tags
+    paragraphs = article_parsed.find_all("p")
 
-    article_content = ''
+    article_content = ""
 
-    #looping through the paragraphs and adding them to the variable
-    for p in paragraphs:  
+    # looping through the paragraphs and adding them to the variable
+    for p in paragraphs:
         article_content += p.text
-
 
     def _create_dictionary_table(text_string) -> dict:
 
-        #removing stop words
+        # removing stop words
         stop_words = set(stopwords.words("english"))
 
         words = word_tokenize(text_string)
 
-        #reducing words to their root form
+        # reducing words to their root form
         stem = PorterStemmer()
 
-        #creating dictionary for the word frequency table
+        # creating dictionary for the word frequency table
         frequency_table = dict()
         for wd in words:
             wd = stem.stem(wd)
@@ -67,14 +69,13 @@ def summarize(text: str, per: int) -> str:
 
         return frequency_table
 
+    def _calculate_sentence_scores(sentences, frequency_table) -> dict:
 
-    def _calculate_sentence_scores(sentences, frequency_table) -> dict:   
-
-        #algorithm for scoring a sentence by its words
+        # algorithm for scoring a sentence by its words
         sentence_weight = dict()
 
         for sentence in sentences:
-            sentence_wordcount = (len(word_tokenize(sentence)))
+            sentence_wordcount = len(word_tokenize(sentence))
             sentence_wordcount_without_stop_words = 0
             for word_weight in frequency_table:
                 if word_weight in sentence.lower():
@@ -84,30 +85,32 @@ def summarize(text: str, per: int) -> str:
                     else:
                         sentence_weight[sentence[:7]] = frequency_table[word_weight]
 
-            sentence_weight[sentence[:7]] = sentence_weight[sentence[:7]] / sentence_wordcount_without_stop_words
-
-
+            sentence_weight[sentence[:7]] = (
+                sentence_weight[sentence[:7]] / sentence_wordcount_without_stop_words
+            )
 
         return sentence_weight
 
     def _calculate_average_score(sentence_weight) -> int:
 
-        #calculating the average score for the sentences
+        # calculating the average score for the sentences
         sum_values = 0
         for entry in sentence_weight:
             sum_values += sentence_weight[entry]
 
-        #getting sentence average value from source text
-        average_score = (sum_values / len(sentence_weight))
+        # getting sentence average value from source text
+        average_score = sum_values / len(sentence_weight)
 
         return average_score
 
     def _get_article_summary(sentences, sentence_weight, threshold):
         sentence_counter = 0
-        article_summary = ''
+        article_summary = ""
 
         for sentence in sentences:
-            if sentence[:7] in sentence_weight and sentence_weight[sentence[:7]] >= (threshold):
+            if sentence[:7] in sentence_weight and sentence_weight[sentence[:7]] >= (
+                threshold
+            ):
                 article_summary += " " + sentence
                 sentence_counter += 1
 
@@ -115,24 +118,26 @@ def summarize(text: str, per: int) -> str:
 
     def _run_article_summary(article):
 
-        #creating a dictionary for the word frequency table
+        # creating a dictionary for the word frequency table
         frequency_table = _create_dictionary_table(article)
 
-        #tokenizing the sentences
+        # tokenizing the sentences
         sentences = sent_tokenize(article)
 
-        #algorithm for scoring a sentence by its words
+        # algorithm for scoring a sentence by its words
         sentence_scores = _calculate_sentence_scores(sentences, frequency_table)
 
-        #getting the threshold
+        # getting the threshold
         threshold = _calculate_average_score(sentence_scores)
 
-        #producing the summary
-        article_summary = _get_article_summary(sentences, sentence_scores, 1.5 * threshold)
+        # producing the summary
+        article_summary = _get_article_summary(
+            sentences, sentence_scores, 1.5 * threshold
+        )
 
         return article_summary
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         text = """
         The Seattle Center Monorail is an elevated straddle-beam monorail line in Seattle, Washington, United States. The 0.9-mile (1.4 km) monorail runs along 5th Avenue between Seattle Center and Westlake Center in Downtown Seattle, making no intermediate stops. The monorail is a major tourist attraction but also operates as a regular public transit service with trains every ten minutes running for up to 16 hours per day. It was constructed in eight months at a cost of $4.2 million for the 1962 Century 21 Exposition, a world's fair hosted at Seattle Center. The monorail underwent major renovations in 1988 after the southern terminal was moved from its location over Pine Street to inside the Westlake Center shopping mall.
 
@@ -142,4 +147,4 @@ def summarize(text: str, per: int) -> str:
         """
 
         summary_results = _run_article_summary(article_content)
-        print(summary_results)    
+        print(summary_results)
