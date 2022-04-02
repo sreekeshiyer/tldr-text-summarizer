@@ -1,5 +1,4 @@
-click==8.0.4
-black
+black==22.3.0
 Flask==2.0.3
 Flask-Cors==3.0.10
 pylint==2.12.2
