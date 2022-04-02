@@ -18,7 +18,7 @@ FileNotFound_Error = Response(
     """{"message": "Bad Request"}""", status=400, mimetype="application/json"
 )
 
-SAVE_DIR = "./backend/static/temp/"
+SAVE_DIR = "./static/temp/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "doc", "docx"}
 
 # Utility Functions
@@ -33,13 +33,11 @@ def extract_text_from_file(file):
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(SAVE_DIR, filename))
+        print("Successfully Saved Temporary File.")
         currFile = os.path.join(SAVE_DIR) + filename
 
         text = textract.process(currFile)
         return {"text": text, "filename": filename}
-
-
-# TODO 6: Write a utility function to extract text from a given URL
 
 
 def extract_text_from_url(url):

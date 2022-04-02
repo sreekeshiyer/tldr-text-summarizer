@@ -20,7 +20,7 @@ export default function ScansPage() {
 
     return (
         <Layout title="TLDR | Previous Scans">
-            <div className="h-[100vh]">
+            <div className="min-h-[100vh] pb-4">
                 <Header />
                 <div></div>
                 <div className="w-full px-4 pt-16">
@@ -43,7 +43,7 @@ export default function ScansPage() {
                                             {({ open }) => (
                                                 <>
                                                     <Disclosure.Button className="flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
-                                                        <div>
+                                                        <div className="">
                                                             <span className="mr-4">
                                                                 {scans.indexOf(
                                                                     sc
@@ -60,7 +60,7 @@ export default function ScansPage() {
                                                                 ...
                                                             </span>
                                                             {sc.file && (
-                                                                <span className="mr-4">
+                                                                <span className="mr-4 justify-self-end">
                                                                     <a
                                                                         rel="noopener noreferrer"
                                                                         download={
@@ -78,7 +78,7 @@ export default function ScansPage() {
                                                                 </span>
                                                             )}
                                                             {sc.url && (
-                                                                <span>
+                                                                <span className="justify-self-end">
                                                                     <a
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
