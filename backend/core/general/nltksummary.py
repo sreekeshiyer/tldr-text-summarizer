@@ -7,9 +7,9 @@ Original file is located at
     https://colab.research.google.com/drive/1YfvxoGVqj4Pcxi5atJI5jRgM9wgHQCzZ
 """
 # importing libraries
+import urllib.request
 import nltk
 import bs4 as BeautifulSoup
-import urllib.request
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, sent_tokenize
