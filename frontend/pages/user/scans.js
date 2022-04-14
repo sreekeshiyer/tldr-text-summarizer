@@ -25,15 +25,15 @@ export default function ScansPage() {
                 <div></div>
                 <div className="w-full px-4 pt-16">
                     <div className="mx-auto w-full max-w-xl rounded-2xl bg-gray-100 p-5">
-                        <h1 className="mt-1 mb-4 text-center text-3xl font-bold text-black">
-                            Previous Scans
-                        </h1>
                         {!scans || scans.length === 0 ? (
-                            <div>
+                            <div className="text-black">
                                 <h1>No Scans Found.</h1>
                             </div>
                         ) : (
                             <div>
+                                <h1 className="mt-1 mb-4 text-center text-3xl font-bold text-black">
+                                    Previous Scans
+                                </h1>
                                 {scans.map((sc) => (
                                     <div
                                         className="my-2"
