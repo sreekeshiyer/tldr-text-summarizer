@@ -1,4 +1,4 @@
-export default function Summary({ text }) {
+export default function Summary({ text, range }) {
     const copyToClipBoard = (e) => {
         e.preventDefault();
         navigator.clipboard.writeText(text);
@@ -9,6 +9,9 @@ export default function Summary({ text }) {
                 <h1 className="mb-3 text-2xl font-bold text-gray-700">
                     Summary:
                 </h1>
+                <p className="text-justify font-sans text-black">
+                    Summary Size: {range}
+                </p>
 
                 <p className="text-justify font-sans text-black">{text}</p>
             </div>

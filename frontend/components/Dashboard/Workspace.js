@@ -347,7 +347,7 @@ export default function WorkSpace() {
             )}
 
             <div className="my-4 px-4">
-                {showResult && <Summary text={resultText} />}
+                {showResult && <Summary size={range} text={resultText} />}
                 <div ref={resultRef} style={{ height: 0 }} />
             </div>
         </div>
