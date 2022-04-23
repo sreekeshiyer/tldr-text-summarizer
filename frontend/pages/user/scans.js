@@ -112,6 +112,7 @@ export default function ScansPage() {
                                                             text={
                                                                 sc.result_text
                                                             }
+                                                            size={sc.size}
                                                         />
                                                     </Disclosure.Panel>
                                                 </>

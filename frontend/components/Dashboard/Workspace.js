@@ -75,6 +75,7 @@ export default function WorkSpace() {
                 file: null,
                 input_text: input_text,
                 url: url,
+                size: range,
                 result_text: result_text,
             });
 
@@ -125,6 +126,7 @@ export default function WorkSpace() {
                     file: `${epo}_${filename}`,
                     input_text: extracted_text,
                     url: null,
+                    size: range,
                     result_text: result_text,
                 });
 
@@ -171,6 +173,7 @@ export default function WorkSpace() {
                     file: null,
                     input_text: text,
                     url: null,
+                    size: range,
                     result_text: result_text,
                 });
 

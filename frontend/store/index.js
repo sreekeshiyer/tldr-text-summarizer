@@ -19,6 +19,7 @@ export const addScan = async ({
     user_id,
     file,
     url,
+    size,
     input_text,
     result_text,
 }) => {
@@ -26,6 +27,7 @@ export const addScan = async ({
         user_id,
         file,
         url,
+        size,
         input_text,
         result_text,
     });

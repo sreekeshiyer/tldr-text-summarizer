@@ -2,6 +2,7 @@ from string import punctuation
 from heapq import nlargest
 from spacy.lang.en.stop_words import STOP_WORDS
 import spacy
+from rouge import Rouge
 
 
 def summarize(text: str, per: int) -> str:
@@ -43,4 +44,5 @@ def summarize(text: str, per: int) -> str:
     summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
     final_summary = [word.text for word in summary]
     summary = "".join(final_summary)
+
     return summary
