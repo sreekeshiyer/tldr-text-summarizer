@@ -8,6 +8,10 @@ def summarize(text: str, per: int) -> str:
     """
     The main summarizer function of the application which takes text as the input and returns its summarized version as the result.
     """
+
+    if len(text) < 10:
+        return "Text is not long enough to summarize."
+
     try:
         nlp = spacy.load("en_core_web_sm")
     except:  # If not present, we download

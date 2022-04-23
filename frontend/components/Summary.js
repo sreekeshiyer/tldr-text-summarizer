@@ -15,7 +15,11 @@ export default function Summary({ text, size }) {
                     </p>
                 </div>
 
-                <p className="text-justify font-sans text-black">{text}</p>
+                <p className="text-justify font-sans text-black">
+                    {text.length > 0
+                        ? text
+                        : "Text Size is too small to generate a Summary."}
+                </p>
             </div>
             <button
                 onClick={copyToClipBoard}

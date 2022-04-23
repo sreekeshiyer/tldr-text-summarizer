@@ -81,7 +81,7 @@ export default function DemoWorkSpace() {
                 </button>
 
                 <div className="my-4">
-                    {showResult && <Summary text={resultText} />}
+                    {showResult && <Summary text={resultText} size={15} />}
                     <div ref={resultRef} style={{ height: 0 }} />
                 </div>
                 <h4 className="text-[0.7rem] text-gray-500 md:text-[0.9rem]">
