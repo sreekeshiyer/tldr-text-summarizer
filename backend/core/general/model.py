@@ -2,7 +2,6 @@ from string import punctuation
 from heapq import nlargest
 from spacy.lang.en.stop_words import STOP_WORDS
 import spacy
-from rouge import Rouge
 
 
 def summarize(text: str, per: int) -> str:
