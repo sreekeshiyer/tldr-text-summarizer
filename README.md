@@ -35,6 +35,6 @@ Here's what a summary looks like:
 All previous scans upto 7 days are stored on the Cloud along with the original text, URL and file information. The original file, if used can be revisited in this period too.
 
 ## Authors
-Sreekesh Iyer
-Swarali Patil
+Sreekesh Iyer <br />
+Swarali Patil <br />
 Shalaka Waghamale
