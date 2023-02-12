@@ -33,3 +33,8 @@ Here's what a summary looks like:
 ![image](https://user-images.githubusercontent.com/67017933/166153730-70722aa5-7071-4550-9892-2638001246fc.png)
 
 All previous scans upto 7 days are stored on the Cloud along with the original text, URL and file information. The original file, if used can be revisited in this period too.
+
+## Authors
+Sreekesh Iyer
+Swarali Patil
+Shalaka Waghamale
